@@ -82,8 +82,7 @@ def calculate_yearly_payments(loan_amount, annual_rate, years, fixed_period, flo
 
 @app.route('/')
 def index():
-    """Render the input form."""
-    return render_template('index.html')
+    return render_template('experience.html')
 
 
 @app.route('/calculate', methods=['POST'])
