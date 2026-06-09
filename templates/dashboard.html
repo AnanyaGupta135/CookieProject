@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Payment Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 40px 50px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #000;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .input-panel {
+            background: white;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 20px;
+        }
+
+        .input-panel h2 {
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #000;
+            font-weight: 400;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 0;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        .results-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .summary-section {
+            background: white;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-section h2 {
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            color: #000;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .metrics-section {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 30px;
+        }
+
+        .metrics-section h2 {
+            color: #000;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            color: #000;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .table-section {
+            background: white;
+            padding: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-section h2 {
+            color: #000;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e0e0e0;
+        }
+
+        thead {
+            background: #fafafa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #000;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .highlight-row {
+            background-color: #f5f5f5 !important;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .highlight-row td {
+            font-weight: 500;
+        }
+
+        .currency {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-link:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="back-link">← Back to Original Calculator</a>
+            <h1>Loan Payment Dashboard</h1>
+            <p class="subtitle">Live calculator with real-time updates - adjust any value to see instant results</p>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- Left Panel: Input Form -->
+            <div class="input-panel">
+                <h2>Loan Parameters</h2>
+
+                <div class="form-group">
+                    <label for="loan_amount">Loan Amount ($)</label>
+                    <input type="number"
+                           id="loan_amount"
+                           step="1000"
+                           min="0"
+                           placeholder="e.g., 100000">
+                    <div class="input-hint">Total loan amount in dollars</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="annual_rate">Fixed Interest Rate (%)</label>
+                    <input type="number"
+                           id="annual_rate"
+                           step="0.01"
+                           min="0"
+                           placeholder="e.g., 5">
+                    <div class="input-hint">Rate for the fixed period</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="loan_years">Loan Term (Years)</label>
+                    <input type="number"
+                           id="loan_years"
+                           min="1"
+                           placeholder="e.g., 30">
+                    <div class="input-hint">Total loan duration</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="fixed_period">Fixed Rate Period (Years)</label>
+                    <input type="number"
+                           id="fixed_period"
+                           min="0"
+                           placeholder="e.g., 5">
+                    <div class="input-hint">Years at fixed rate</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="floating_rate">Floating Interest Rate (%)</label>
+                    <input type="number"
+                           id="floating_rate"
+                           step="0.01"
+                           min="0"
+                           placeholder="e.g., 6.5">
+                    <div class="input-hint">Rate after fixed period</div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="results-panel">
+                <!-- Summary Section -->
+                <div class="summary-section">
+                    <h2>Summary</h2>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <span class="summary-label">Loan Amount</span>
+                            <span class="summary-value" id="display_loan_amount">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Loan Term</span>
+                            <span class="summary-value" id="display_loan_years">0 years</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Fixed Rate</span>
+                            <span class="summary-value" id="display_fixed_rate">0.00%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Floating Rate</span>
+                            <span class="summary-value" id="display_floating_rate">0.00%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Fixed Period</span>
+                            <span class="summary-value" id="display_fixed_period">0 years</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Section -->
+                <div class="metrics-section">
+                    <h2>After <span id="fixed_period_text">0</span> Years - Key Metrics</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Remaining Principal</div>
+                            <div class="metric-value currency" id="remaining_balance">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Years Left</div>
+                            <div class="metric-value" id="years_left">0 years</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Principal Paid</div>
+                            <div class="metric-value currency" id="principal_paid">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full Payment Schedule -->
+                <div class="table-section">
+                    <h2>Complete Yearly Payment Schedule</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Principal Payment</th>
+                                <th>Interest Payment</th>
+                                <th>Total Payment</th>
+                                <th>Remaining Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payment_table_body">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+</body>
+</html>

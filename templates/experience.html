@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheCookieProject</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --burgundy: #5B161B;
+            --gold: #A68B67;
+            --cream: #F9F8F4;
+            --dark-text: #2D2D2D;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--cream);
+            color: var(--dark-text);
+            overflow-x: hidden;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* LANDING HERO */
+        .hero-section {
+            background: var(--cream);
+            flex-direction: column;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .platform-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            line-height: 1;
+            color: var(--burgundy);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 20px;
+            line-height: 1.4;
+            color: rgba(45, 45, 45, 0.8);
+            font-style: italic;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 40px;
+            background: var(--gold);
+            margin: 10px auto 0;
+        }
+
+        /* INPUT FORM SECTION */
+        .form-section {
+            background: var(--cream);
+            padding: 80px 40px;
+        }
+
+        .form-container {
+            max-width: 1280px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .form-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-left {
+            padding: 40px;
+        }
+
+        .form-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--burgundy);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .input-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.9px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            font-family: 'Lora', serif;
+            font-size: 24px;
+            color: var(--dark-text);
+            border: none;
+            border-bottom: 1px solid transparent;
+            background: transparent;
+            padding: 8px 0;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-bottom-color: var(--gold);
+        }
+
+        .edit-icon {
+            position: absolute;
+            right: 0;
+            top: 32px;
+            width: 10px;
+            height: 10px;
+            opacity: 0.3;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: var(--burgundy);
+            color: var(--cream);
+            border: none;
+            padding: 18px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 40px;
+        }
+
+        .submit-button:hover {
+            background: #7a1f26;
+            box-shadow: 0 4px 12px rgba(91, 22, 27, 0.3);
+        }
+
+        .form-right {
+            background: var(--burgundy);
+            padding: 80px;
+            min-height: 600px;
+            position: sticky;
+            top: 80px;
+        }
+
+        .preview-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--cream);
+            margin-bottom: 60px;
+        }
+
+        .preview-metric {
+            margin-bottom: 50px;
+        }
+
+        .preview-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .preview-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .preview-note {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1.2px;
+            color: var(--gold);
+            text-align: center;
+            margin-top: 60px;
+            text-transform: uppercase;
+        }
+
+        /* DASHBOARD SECTION */
+        .dashboard-section {
+            background: var(--cream);
+            padding: 80px 40px;
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: flex;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .dashboard-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 60px;
+            color: var(--burgundy);
+            margin-bottom: 20px;
+        }
+
+        .dashboard-subtitle {
+            font-family: 'Lora', serif;
+            font-size: 20px;
+            font-style: italic;
+            color: rgba(45, 45, 45, 0.8);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dashboard-inputs {
+            background: var(--white);
+            padding: 40px;
+            border: 1px solid #E5E1D8;
+            position: sticky;
+            top: 40px;
+            height: fit-content;
+        }
+
+        .dashboard-inputs-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E5E1D8;
+        }
+
+        .dashboard-input-group {
+            margin-bottom: 24px;
+        }
+
+        .dashboard-input-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .dashboard-input-field {
+            width: 100%;
+            font-family: 'Lora', serif;
+            font-size: 18px;
+            color: var(--dark-text);
+            border: 1px solid #E5E1D8;
+            background: var(--cream);
+            padding: 10px 12px;
+            transition: border-color 0.2s;
+        }
+
+        .dashboard-input-field:focus {
+            outline: none;
+            border-color: var(--burgundy);
+        }
+
+        .dashboard-results {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .results-card {
+            background: var(--white);
+            padding: 40px;
+            border: 1px solid #E5E1D8;
+        }
+
+        .results-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #E5E1D8;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .highlight-card {
+            background: rgba(91, 22, 27, 0.05);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .highlight-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: var(--burgundy);
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        thead {
+            background: rgba(249, 248, 244, 0.5);
+            border-bottom: 2px solid #E5E1D8;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: var(--burgundy);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #F5F5F5;
+            color: var(--dark-text);
+            font-size: 14px;
+            font-family: 'Lora', serif;
+        }
+
+        tbody tr:hover {
+            background-color: rgba(249, 248, 244, 0.5);
+        }
+
+        .highlight-row {
+            background-color: rgba(166, 139, 103, 0.1) !important;
+            border-left: 3px solid var(--gold);
+        }
+
+        .highlight-row td {
+            font-weight: 600;
+        }
+
+        .currency {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background: var(--burgundy);
+            color: var(--cream);
+            padding: 15px 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background: #7a1f26;
+        }
+    </style>
+</head>
+<body>
+    <!-- Section 1: Landing Hero -->
+    <section id="hero" class="section hero-section">
+        <div class="hero-content">
+            <p class="platform-label">Platform Preview</p>
+            <h1 class="hero-title">The Cookie Project</h1>
+            <!--p class="hero-subtitle">"The Cookie Project"</p-->
+        </div>
+        <div class="scroll-indicator" onclick="scrollToForm()">
+            Scroll to Begin
+        </div>
+    </section>
+
+    <!-- Section 2: Input Form -->
+    <section id="input-form" class="section form-section">
+        <div class="form-container">
+            <div class="form-left">
+                <h2 class="form-title">Precision Input Form</h2>
+
+                <form id="loan-form">
+                    <div class="input-group">
+                        <label class="input-label">Loan Amount</label>
+                        <input type="number" id="form_loan_amount" class="input-field" value="12500000" step="1000">
+                        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                        </svg>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Annual Rate</label>
+                        <input type="number" id="form_annual_rate" class="input-field" value="4.25" step="0.01">
+                        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                        </svg>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Loan Years</label>
+                        <input type="number" id="form_loan_years" class="input-field" value="25" min="1">
+                        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                        </svg>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Fixed Period Years</label>
+                        <input type="number" id="form_fixed_period" class="input-field" value="5" min="0">
+                        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                        </svg>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Floating Rate</label>
+                        <input type="number" id="form_floating_rate" class="input-field" value="5.50" step="0.01">
+                        <svg class="edit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"/>
+                        </svg>
+                    </div>
+
+                    <button type="submit" class="submit-button">Generate Full Report</button>
+                </form>
+            </div>
+
+            <div class="form-right">
+                <h2 class="preview-title">Projected Outcomes</h2>
+
+                <div class="preview-metric">
+                    <p class="preview-label">Remaining Principal After Fixed Period</p>
+                    <p class="preview-value" id="preview_remaining">—</p>
+                </div>
+
+                <p class="preview-note">Live Dashboard • Session Active</p>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    <script src="{{ url_for('static', filename='experience.js') }}"></script>
+</body>
+</html>

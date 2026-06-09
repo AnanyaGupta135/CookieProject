@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            background: white;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 50px 60px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #000;
+            margin-bottom: 8px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            color: #000;
+            font-weight: 400;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d0d0d0;
+            border-radius: 0;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .input-hint {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 0;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin-top: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background: #e55a2b;
+        }
+
+        button:active {
+            background: #cc4d24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loan Payment Calculator</h1>
+        <p class="subtitle">Calculate loan payments with fixed and floating interest rates</p>
+
+        <form method="POST" action="/calculate">
+            <div class="form-group">
+                <label for="loan_amount">Loan Amount ($)</label>
+                <input type="number"
+                       id="loan_amount"
+                       name="loan_amount"
+                       step="0.01"
+                       required
+                       placeholder="e.g., 100000">
+                <div class="input-hint">Enter the total loan amount in dollars</div>
+            </div>
+
+            <div class="form-group">
+                <label for="annual_rate">Annual Interest Rate (%)</label>
+                <input type="number"
+                       id="annual_rate"
+                       name="annual_rate"
+                       step="0.01"
+                       required
+                       placeholder="e.g., 5.5">
+                <div class="input-hint">Enter the annual interest rate as a percentage</div>
+            </div>
+
+            <div class="form-group">
+                <label for="loan_years">Loan Term (Years)</label>
+                <input type="number"
+                       id="loan_years"
+                       name="loan_years"
+                       required
+                       min="1"
+                       placeholder="e.g., 30">
+                <div class="input-hint">Total number of years for the loan</div>
+            </div>
+
+            <div class="form-group">
+                <label for="fixed_period">Fixed Rate Period (Years)</label>
+                <input type="number"
+                       id="fixed_period"
+                       name="fixed_period"
+                       required
+                       min="0"
+                       placeholder="e.g., 5">
+                <div class="input-hint">Number of years at the fixed interest rate</div>
+            </div>
+
+            <div class="form-group">
+                <label for="floating_rate">Floating Interest Rate (%)</label>
+                <input type="number"
+                       id="floating_rate"
+                       name="floating_rate"
+                       step="0.01"
+                       required
+                       placeholder="e.g., 6.5">
+                <div class="input-hint">Rate applied after the fixed period ends</div>
+            </div>
+
+            <button type="submit">
+                Calculate Payments
+            </button>
+        </form>
+    </div>
+</body>
+</html>

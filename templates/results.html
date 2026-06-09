@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Calculation Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #000;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .summary {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .summary h2 {
+            color: #000;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            color: #000;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 6px;
+        }
+
+        .highlight-box {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .highlight-box h2 {
+            color: #000;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .highlight-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .highlight-stat {
+            background: white;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .highlight-stat-label {
+            color: #666;
+            font-size: 12px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .highlight-stat-value {
+            color: #000;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .section {
+            margin: 50px 0;
+        }
+
+        .section h2 {
+            color: #000;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        thead {
+            background: #fafafa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #000;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .highlight-row {
+            background-color: #f5f5f5 !important;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .highlight-row td {
+            font-weight: 500;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 14px 28px;
+            background: #ff6b35;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 13px;
+        }
+
+        .back-button:hover {
+            background: #e55a2b;
+        }
+
+        .currency {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loan Payment Analysis</h1>
+
+        <div class="summary">
+            <h2>Loan Parameters</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-label">Loan Amount</span>
+                    <span class="summary-value">${{ "{:,.2f}".format(loan_amount) }}</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Loan Term</span>
+                    <span class="summary-value">{{ loan_years }} years</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Fixed Rate (Years 1-{{ fixed_period }})</span>
+                    <span class="summary-value">{{ "{:.2f}".format(annual_rate) }}%</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Floating Rate (Years {{ fixed_period + 1 }}-{{ loan_years }})</span>
+                    <span class="summary-value">{{ "{:.2f}".format(floating_rate) }}%</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Fixed Period</span>
+                    <span class="summary-value">{{ fixed_period }} years</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h2>After {{ fixed_period }} Year{{ 's' if fixed_period != 1 else '' }} - Key Metrics</h2>
+            <div class="highlight-stats">
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Remaining Principal Balance</div>
+                    <div class="highlight-stat-value currency">${{ "{:,.2f}".format(remaining_balance) }}</div>
+                </div>
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Years of Payments Left</div>
+                    <div class="highlight-stat-value">{{ years_left }} year{{ 's' if years_left != 1 else '' }}</div>
+                </div>
+                <div class="highlight-stat">
+                    <div class="highlight-stat-label">Principal Paid So Far</div>
+                    <div class="highlight-stat-value currency">${{ "{:,.2f}".format(loan_amount - remaining_balance) }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Complete Yearly Payment Schedule</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Principal Payment</th>
+                        <th>Interest Payment</th>
+                        <th>Total Payment</th>
+                        <th>Remaining Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in yearly_payments %}
+                    <tr {% if payment.year == fixed_period %}class="highlight-row"{% endif %}>
+                        <td>{{ payment.year }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.principal) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.interest) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.total) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.remaining_balance) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if payments_after_fixed %}
+        <div class="section">
+            <h2>Payments After Fixed Rate Period (Years {{ fixed_period + 1 }} - {{ loan_years }})</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Principal Payment</th>
+                        <th>Interest Payment</th>
+                        <th>Total Payment</th>
+                        <th>Remaining Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments_after_fixed %}
+                    <tr>
+                        <td>{{ payment.year }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.principal) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.interest) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.total) }}</td>
+                        <td class="currency">${{ "{:,.2f}".format(payment.remaining_balance) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <a href="/" class="back-button">&larr; Calculate Another Loan</a>
+    </div>
+</body>
+</html>
