@@ -253,14 +253,14 @@
                 </div>
 
                 <div class="input-group">
-                    <label class="input-label" for="loan_years">Loan Term (years)</label>
+                    <label class="input-label" for="loan_years">Amortization Period (years)</label>
                     <input type="number" id="loan_years" name="loan_years" class="input-field"
                            placeholder="25" min="1" required
                            value="{{ form.loan_years if form else '' }}">
                 </div>
 
                 <div class="input-group">
-                    <label class="input-label" for="fixed_period">Fixed Period (years)</label>
+                    <label class="input-label" for="fixed_period">Loan Term (years)</label>
                     <input type="number" id="fixed_period" name="fixed_period" class="input-field"
                            placeholder="5" min="0" required
                            value="{{ form.fixed_period if form else '' }}">
