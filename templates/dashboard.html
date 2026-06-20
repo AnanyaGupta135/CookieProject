@@ -269,13 +269,60 @@
         .back-link:hover {
             color: #000;
         }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .save-btn {
+            background: #5B161B;
+            color: #F9F8F4;
+            border: none;
+            padding: 10px 24px;
+            font-size: 12px;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #7a1f26;
+        }
+
+        .save-toast {
+            display: none;
+            color: #5B161B;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 12px;
+        }
+
+        .save-toast.visible {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    {% if property %}
+    <script>var PROPERTY = {{ property | tojson }};</script>
+    {% endif %}
+
     <div class="container">
         <div class="header">
-            <a href="/" class="back-link">← Back to Original Calculator</a>
-            <h1>Loan Payment Dashboard</h1>
+            <div class="header-top">
+                <a href="/" class="back-link">← Back to Portfolio</a>
+                {% if property %}
+                <button class="save-btn" onclick="saveProperty()">Save Changes</button>
+                {% endif %}
+            </div>
+            <h1>{% if property %}{{ property.name }}{% else %}Loan Payment Dashboard{% endif %}</h1>
+            {% if property %}
+            <div class="save-toast" id="save_toast">Saved ✓</div>
+            {% endif %}
         </div>
 
         <div class="dashboard-content">
@@ -304,25 +351,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="loan_years">Loan Term (Years)</label>
+                    <label for="loan_years">Amortization Period (Years)</label>
                     <input type="number"
                            id="loan_years"
                            min="1"
                            placeholder="e.g., 30">
-                    <div class="input-hint">Total loan duration</div>
+                    <div class="input-hint">Total amortization duration</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="fixed_period">Fixed Rate Period (Years)</label>
+                    <label for="fixed_period">Loan Term (Years)</label>
                     <input type="number"
                            id="fixed_period"
                            min="0"
                            placeholder="e.g., 5">
-                    <div class="input-hint">Years at fixed rate</div>
+                    <div class="input-hint">Years at fixed rate - length of loan</div>
                 </div>
 
                 <div class="form-group">
-                    <label for="floating_rate">Floating Interest Rate (%)</label>
+                    <label for="floating_rate">Assumed Market Rate Post Loan Term (%)</label>
                     <input type="number"
                            id="floating_rate"
                            step="0.01"
@@ -363,10 +410,10 @@
 
                 <!-- Key Metrics Section -->
                 <div class="metrics-section">
-                    <h2>After <span id="fixed_period_text">0</span> Years - Key Metrics</h2>
+                    <h2>Key Metrics Post Loan Term</h2>
                     <div class="metrics-grid">
                         <div class="metric-card">
-                            <div class="metric-label">Remaining Principal</div>
+                            <div class="metric-label">Remaining Principal -- i.e Baloon Payment Post Fixed Period</div>
                             <div class="metric-value currency" id="remaining_balance">$0.00</div>
                         </div>
                         <div class="metric-card">
@@ -377,6 +424,74 @@
                             <div class="metric-label">Principal Paid</div>
                             <div class="metric-value currency" id="principal_paid">$0.00</div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Balance Explorer -->
+                <div class="metrics-section" id="balance_explorer_card">
+                    <h2>Remaining Balance Calculator</h2>
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+                        <input type="range" id="explorer_slider" min="0" max="30" value="0"
+                               style="flex:1; accent-color:#5B161B; cursor:pointer;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:13px; color:#666;">Year</span>
+                            <input type="number" id="explorer_year_input" min="0" max="30" value="0"
+                                   style="width:60px; padding:6px 8px; border:1px solid #d0d0d0; font-size:14px; font-family:inherit; text-align:center;">
+                        </div>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">After Year <span id="explorer_year_display">0</span></div>
+                            <div class="metric-label" style="margin-top:4px;">Remaining Balance</div>
+                            <div class="metric-value currency" id="explorer_balance">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">After Year <span id="explorer_year_display2">0</span></div>
+                            <div class="metric-label" style="margin-top:4px;">Total Principal Paid</div>
+                            <div class="metric-value currency" id="explorer_paid">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DSCR Calculator -->
+                <div class="metrics-section" id="dscr_card">
+                    <h2>DSCR Calculator</h2>
+                    <p style="font-size:13px; color:#666; margin-bottom:24px;">
+                        Debt Service Coverage Ratio = Annual Rental Income &divide; (Loan Amount &times; Stressed Rate)
+                    </p>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-bottom:28px;">
+                        <div>
+                            <label style="font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:#666; margin-bottom:6px; display:block;">Annual Rental Income ($)</label>
+                            <input type="number" id="dscr_income" min="0" step="1000" placeholder="e.g. 240000"
+                                   style="width:100%; padding:10px 12px; border:1px solid #d0d0d0; font-size:15px; font-family:inherit; background:white;">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:#666; margin-bottom:6px; display:block;">Stressed Interest Rate (%)</label>
+                            <input type="number" id="dscr_stressed_rate" min="0" step="0.01" placeholder="e.g. 6.5"
+                                   style="width:100%; padding:10px 12px; border:1px solid #d0d0d0; font-size:15px; font-family:inherit; background:white;">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; letter-spacing:0.5px; text-transform:uppercase; color:#666; margin-bottom:6px; display:block;">Required DSCR</label>
+                            <input type="number" id="dscr_required" min="0" step="0.01" placeholder="e.g. 1.25"
+                                   style="width:100%; padding:10px 12px; border:1px solid #d0d0d0; font-size:15px; font-family:inherit; background:white;">
+                        </div>
+                    </div>
+                    <div id="dscr_result" style="display:none;">
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:16px; margin-bottom:20px;">
+                            <div class="metric-card">
+                                <div class="metric-label">Calculated DSCR</div>
+                                <div class="metric-value" id="dscr_calculated">—</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Required DSCR</div>
+                                <div class="metric-value" id="dscr_required_display">—</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Annual Payment</div>
+                                <div class="metric-value currency" id="dscr_debt_service">—</div>
+                            </div>
+                        </div>
+                        <div id="dscr_verdict" style="padding:18px 24px; font-size:15px; font-weight:600; letter-spacing:0.3px;"></div>
                     </div>
                 </div>
 
@@ -404,5 +519,87 @@
     </div>
 
     <script src="{{ url_for('static', filename='calculator.js') }}"></script>
+    <script>
+        document.getElementById('explorer_slider').addEventListener('input', function() {
+            var year = parseInt(this.value);
+            document.getElementById('explorer_year_input').value = year;
+            document.getElementById('explorer_year_display').textContent = year;
+            document.getElementById('explorer_year_display2').textContent = year;
+            updateBalanceExplorer(year);
+        });
+        document.getElementById('explorer_year_input').addEventListener('input', function() {
+            var year = Math.min(Math.max(parseInt(this.value) || 0, 0), parseInt(document.getElementById('explorer_slider').max));
+            document.getElementById('explorer_slider').value = year;
+            document.getElementById('explorer_year_display').textContent = year;
+            document.getElementById('explorer_year_display2').textContent = year;
+            updateBalanceExplorer(year);
+        });
+    </script>
+    <script>
+        function updateDSCR() {
+            const income = parseFloat(document.getElementById('dscr_income').value);
+            const stressedRate = parseFloat(document.getElementById('dscr_stressed_rate').value) / 100;
+            const required = parseFloat(document.getElementById('dscr_required').value);
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+
+            if (isNaN(income) || isNaN(stressedRate) || isNaN(required) || isNaN(loanAmount) || loanAmount <= 0 || stressedRate <= 0) {
+                document.getElementById('dscr_result').style.display = 'none';
+                return;
+            }
+
+            const debtService = loanAmount * stressedRate;
+            const dscr = income / debtService;
+            const passes = dscr >= required;
+
+            document.getElementById('dscr_result').style.display = 'block';
+            document.getElementById('dscr_calculated').textContent = dscr.toFixed(2) + 'x';
+            document.getElementById('dscr_required_display').textContent = required.toFixed(2) + 'x';
+            document.getElementById('dscr_debt_service').textContent = new Intl.NumberFormat('en-US', {
+                style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0
+            }).format(debtService);
+
+            const verdict = document.getElementById('dscr_verdict');
+            if (passes) {
+                verdict.style.background = '#f0faf4';
+                verdict.style.borderLeft = '4px solid #2a7a4b';
+                verdict.style.color = '#2a7a4b';
+                verdict.textContent = '✓  Passes — DSCR of ' + dscr.toFixed(2) + 'x exceeds the required ' + required.toFixed(2) + 'x by ' + (dscr - required).toFixed(2) + 'x -- Refinance is possible';
+            } else {
+                verdict.style.background = '#fdf3f3';
+                verdict.style.borderLeft = '4px solid #5B161B';
+                verdict.style.color = '#5B161B';
+                verdict.textContent = '✗  Fails — DSCR of ' + dscr.toFixed(2) + 'x is ' + (required - dscr).toFixed(2) + 'x short of the required ' + required.toFixed(2) + 'x';
+            }
+        }
+
+        ['dscr_income', 'dscr_stressed_rate', 'dscr_required'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', updateDSCR);
+        });
+        document.getElementById('loan_amount').addEventListener('input', updateDSCR);
+    </script>
+    {% if property %}
+    <script>
+        function saveProperty() {
+            const payload = {
+                loan_amount: parseFloat(document.getElementById('loan_amount').value),
+                annual_rate: parseFloat(document.getElementById('annual_rate').value),
+                loan_years: parseInt(document.getElementById('loan_years').value),
+                fixed_period: parseInt(document.getElementById('fixed_period').value),
+                floating_rate: parseFloat(document.getElementById('floating_rate').value),
+            };
+            fetch('/property/' + PROPERTY.id + '/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }).then(function(res) {
+                if (res.ok) {
+                    var toast = document.getElementById('save_toast');
+                    toast.classList.add('visible');
+                    setTimeout(function() { toast.classList.remove('visible'); }, 2500);
+                }
+            });
+        }
+    </script>
+    {% endif %}
 </body>
 </html>

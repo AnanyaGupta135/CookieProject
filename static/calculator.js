@@ -188,6 +188,7 @@ function updateResults() {
 
     // Calculate yearly payments
     const yearlyPayments = calculateYearlyPayments(loanAmount, annualRate, loanYears, fixedPeriod, floatingRate);
+    lastYearlyPayments = yearlyPayments;
 
     // Update summary section
     document.getElementById('display_loan_amount').textContent = formatCurrency(loanAmount);
@@ -205,7 +206,17 @@ function updateResults() {
     document.getElementById('remaining_balance').textContent = formatCurrency(remainingBalance);
     document.getElementById('years_left').textContent = `${yearsLeft} year${yearsLeft !== 1 ? 's' : ''}`;
     document.getElementById('principal_paid').textContent = formatCurrency(principalPaid);
-    document.getElementById('fixed_period_text').textContent = fixedPeriod;
+
+    // Update balance explorer slider range and refresh display
+    const slider = document.getElementById('explorer_slider');
+    const yearInput = document.getElementById('explorer_year_input');
+    if (slider) {
+        slider.max = loanYears;
+        slider.value = Math.min(parseInt(slider.value) || 0, loanYears);
+        yearInput.max = loanYears;
+        yearInput.value = slider.value;
+        updateBalanceExplorer(parseInt(slider.value));
+    }
 
     // Update full payment schedule table
     const tableBody = document.getElementById('payment_table_body');
@@ -229,6 +240,18 @@ function updateResults() {
 
 }
 
+// Holds the last calculated schedule so the balance explorer can read it
+let lastYearlyPayments = [];
+
+function updateBalanceExplorer(year) {
+    const loanAmount = parseFloat(document.getElementById('loan_amount').value);
+    const remainingBalance = year === 0 ? loanAmount : (lastYearlyPayments[year - 1] ? lastYearlyPayments[year - 1].remainingBalance : 0);
+    document.getElementById('explorer_year_display').textContent = year;
+    document.getElementById('explorer_year_display2').textContent = year;
+    document.getElementById('explorer_balance').textContent = formatCurrency(remainingBalance);
+    document.getElementById('explorer_paid').textContent = formatCurrency(loanAmount - remainingBalance);
+}
+
 // Debounce function to avoid excessive updates while typing
 let debounceTimer;
 function debounceUpdate() {
@@ -238,27 +261,32 @@ function debounceUpdate() {
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if values were passed from the experience form
-    const storedData = sessionStorage.getItem('loanFormData');
-
-    if (storedData) {
-        // Use values from experience form
-        const formData = JSON.parse(storedData);
-        document.getElementById('loan_amount').value = formData.loan_amount;
-        document.getElementById('annual_rate').value = formData.annual_rate;
-        document.getElementById('loan_years').value = formData.loan_years;
-        document.getElementById('fixed_period').value = formData.fixed_period;
-        document.getElementById('floating_rate').value = formData.floating_rate;
-
-        // Clear the stored data
-        sessionStorage.removeItem('loanFormData');
+    // Priority 1: property saved in DB (injected by server as PROPERTY global)
+    // Priority 2: values passed from experience form via sessionStorage
+    // Priority 3: hardcoded defaults
+    if (typeof PROPERTY !== 'undefined' && PROPERTY) {
+        document.getElementById('loan_amount').value = PROPERTY.loan_amount;
+        document.getElementById('annual_rate').value = PROPERTY.annual_rate;
+        document.getElementById('loan_years').value = PROPERTY.loan_years;
+        document.getElementById('fixed_period').value = PROPERTY.fixed_period;
+        document.getElementById('floating_rate').value = PROPERTY.floating_rate;
     } else {
-        // Set default values
-        document.getElementById('loan_amount').value = '100000';
-        document.getElementById('annual_rate').value = '5';
-        document.getElementById('loan_years').value = '30';
-        document.getElementById('fixed_period').value = '5';
-        document.getElementById('floating_rate').value = '6';
+        const storedData = sessionStorage.getItem('loanFormData');
+        if (storedData) {
+            const formData = JSON.parse(storedData);
+            document.getElementById('loan_amount').value = formData.loan_amount;
+            document.getElementById('annual_rate').value = formData.annual_rate;
+            document.getElementById('loan_years').value = formData.loan_years;
+            document.getElementById('fixed_period').value = formData.fixed_period;
+            document.getElementById('floating_rate').value = formData.floating_rate;
+            sessionStorage.removeItem('loanFormData');
+        } else {
+            document.getElementById('loan_amount').value = '100000';
+            document.getElementById('annual_rate').value = '5';
+            document.getElementById('loan_years').value = '30';
+            document.getElementById('fixed_period').value = '5';
+            document.getElementById('floating_rate').value = '6';
+        }
     }
 
     // Add event listeners to all inputs

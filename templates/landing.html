@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheCookieProject — Properties</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --burgundy: #5B161B;
+            --gold: #A68B67;
+            --cream: #F9F8F4;
+            --dark-text: #2D2D2D;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--cream);
+            color: var(--dark-text);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--cream);
+            border-bottom: 1px solid #E5E1D8;
+            padding: 24px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--burgundy);
+            text-decoration: none;
+        }
+
+        .btn-add {
+            background: var(--burgundy);
+            color: var(--cream);
+            border: none;
+            padding: 14px 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-add:hover {
+            background: #7a1f26;
+            box-shadow: 0 4px 12px rgba(91, 22, 27, 0.3);
+        }
+
+        /* HEADER */
+        .page-header {
+            padding: 60px 60px 40px;
+        }
+
+        .page-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            color: var(--burgundy);
+            font-weight: 400;
+        }
+
+        /* GRID */
+        .properties-grid {
+            padding: 0 60px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 28px;
+        }
+
+        /* CARD */
+        .property-card {
+            background: var(--white);
+            border: 1px solid #E5E1D8;
+            position: relative;
+            transition: box-shadow 0.2s;
+        }
+
+        .property-card:hover {
+            box-shadow: 0 6px 24px rgba(91, 22, 27, 0.1);
+        }
+
+        .card-link {
+            display: block;
+            padding: 36px 36px 28px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--burgundy);
+            margin-bottom: 24px;
+            padding-right: 24px;
+        }
+
+        .card-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card-metric-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .card-metric-value {
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            color: var(--dark-text);
+        }
+
+        .card-divider {
+            height: 1px;
+            background: #E5E1D8;
+            margin: 24px 36px 0;
+        }
+
+        .card-footer {
+            padding: 14px 36px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        /* DELETE BUTTON */
+        .btn-delete {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: none;
+            border: none;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #C5BEAF;
+            font-size: 16px;
+            line-height: 1;
+            transition: color 0.2s;
+            padding: 0;
+        }
+
+        .btn-delete:hover {
+            color: var(--burgundy);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            padding: 0 60px 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 360px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 48px;
+            height: 1px;
+            background: var(--gold);
+            margin-bottom: 32px;
+        }
+
+        .empty-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--burgundy);
+            margin-bottom: 14px;
+            font-weight: 400;
+        }
+
+        .empty-text {
+            font-family: 'Lora', serif;
+            font-size: 16px;
+            font-style: italic;
+            color: rgba(45, 45, 45, 0.6);
+            margin-bottom: 36px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="nav-brand">The Cookie Project</a>
+        <a href="/property/new" class="btn-add">+ Add Property</a>
+    </nav>
+
+    <div class="page-header">
+        <p class="page-label">Portfolio</p>
+        <h1 class="page-title">Your Properties</h1>
+    </div>
+
+    {% if properties %}
+    <div class="properties-grid">
+        {% for p in properties %}
+        <div class="property-card">
+            <a href="/property/{{ p.id }}" class="card-link">
+                <h2 class="card-name">{{ p.name }}</h2>
+                <div class="card-metrics">
+                    <div>
+                        <p class="card-metric-label">Loan Amount</p>
+                        <p class="card-metric-value">${{ "{:,.0f}".format(p.loan_amount) }}</p>
+                    </div>
+                    <div>
+                        <p class="card-metric-label">Fixed Rate</p>
+                        <p class="card-metric-value">{{ p.annual_rate }}%</p>
+                    </div>
+                    <div>
+                        <p class="card-metric-label">Fixed Period</p>
+                        <p class="card-metric-value">{{ p.fixed_period }} yr</p>
+                    </div>
+                    <div>
+                        <p class="card-metric-label">Floating Rate</p>
+                        <p class="card-metric-value">{{ p.floating_rate }}%</p>
+                    </div>
+                </div>
+            </a>
+            <div class="card-divider"></div>
+            <div class="card-footer">{{ p.loan_years }} year term</div>
+            <form method="POST" action="/property/{{ p.id }}/delete" onsubmit="return confirm('Delete {{ p.name }}?')">
+                <button type="submit" class="btn-delete" title="Delete">&#x2715;</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon"></div>
+        <h2 class="empty-title">No properties yet</h2>
+        <p class="empty-text">Add your first property to begin analyzing loan scenarios.</p>
+        <a href="/property/new" class="btn-add">+ Add Property</a>
+    </div>
+    {% endif %}
+
+</body>
+</html>

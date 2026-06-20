@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from functions import ppmt, ipmt
+import database
 
 app = Flask(__name__)
+database.init_db()
 
 def calculate_yearly_payments(loan_amount, annual_rate, years, fixed_period, floating_rate):
     """
@@ -82,7 +84,70 @@ def calculate_yearly_payments(loan_amount, annual_rate, years, fixed_period, flo
 
 @app.route('/')
 def index():
-    return render_template('experience.html')
+    properties = database.list_properties()
+    return render_template('landing.html', properties=properties)
+
+
+@app.route('/property/new', methods=['GET', 'POST'])
+def property_new():
+    if request.method == 'POST':
+        try:
+            loan_amount = float(request.form['loan_amount'])
+            annual_rate = float(request.form['annual_rate'])
+            loan_years = int(request.form['loan_years'])
+            fixed_period = int(request.form['fixed_period'])
+            floating_rate = float(request.form['floating_rate'])
+
+            if fixed_period > loan_years:
+                raise ValueError("Fixed period cannot exceed loan term.")
+            if loan_amount <= 0 or loan_years <= 0:
+                raise ValueError("Loan amount and term must be positive.")
+            if annual_rate < 0 or floating_rate < 0:
+                raise ValueError("Rates must be non-negative.")
+
+            prop = database.create_property(
+                name=request.form['name'],
+                loan_amount=loan_amount,
+                annual_rate=annual_rate,
+                loan_years=loan_years,
+                fixed_period=fixed_period,
+                floating_rate=floating_rate,
+            )
+            return redirect(url_for('property_view', id=prop['id']))
+        except ValueError as e:
+            return render_template('property_new.html', error=str(e), form=request.form)
+    return render_template('property_new.html')
+
+
+@app.route('/property/<int:id>')
+def property_view(id):
+    prop = database.get_property(id)
+    if prop is None:
+        return "Property not found", 404
+    return render_template('dashboard.html', property=prop)
+
+
+@app.route('/property/<int:id>/save', methods=['POST'])
+def property_save(id):
+    data = request.get_json(force=True)
+    prop = database.update_property(
+        id,
+        name=data.get('name'),
+        loan_amount=data.get('loan_amount'),
+        annual_rate=data.get('annual_rate'),
+        loan_years=data.get('loan_years'),
+        fixed_period=data.get('fixed_period'),
+        floating_rate=data.get('floating_rate'),
+    )
+    if prop is None:
+        return jsonify({'error': 'Property not found'}), 404
+    return jsonify(prop)
+
+
+@app.route('/property/<int:id>/delete', methods=['POST'])
+def property_delete(id):
+    database.delete_property(id)
+    return redirect(url_for('index'))
 
 
 @app.route('/calculate', methods=['POST'])

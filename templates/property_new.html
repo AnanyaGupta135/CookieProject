@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheCookieProject — New Property</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --burgundy: #5B161B;
+            --gold: #A68B67;
+            --cream: #F9F8F4;
+            --dark-text: #2D2D2D;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Lora', serif;
+            background: var(--cream);
+            color: var(--dark-text);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--cream);
+            border-bottom: 1px solid #E5E1D8;
+            padding: 24px 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--burgundy);
+            text-decoration: none;
+        }
+
+        .nav-back {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 1.2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-back:hover {
+            color: var(--burgundy);
+        }
+
+        /* LAYOUT */
+        .page-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: calc(100vh - 73px);
+        }
+
+        @media (max-width: 900px) {
+            .page-wrap { grid-template-columns: 1fr; }
+            .panel-right { display: none; }
+        }
+
+        /* LEFT PANEL */
+        .panel-left {
+            padding: 60px;
+        }
+
+        .page-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: var(--burgundy);
+            font-weight: 400;
+            margin-bottom: 48px;
+        }
+
+        /* ERROR BANNER */
+        .error-banner {
+            background: rgba(91, 22, 27, 0.08);
+            border-left: 3px solid var(--burgundy);
+            padding: 16px 20px;
+            margin-bottom: 36px;
+            font-family: 'Lora', serif;
+            font-size: 14px;
+            color: var(--burgundy);
+            font-style: italic;
+        }
+
+        /* FORM */
+        .input-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        .input-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: var(--gold);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            font-family: 'Lora', serif;
+            font-size: 22px;
+            color: var(--dark-text);
+            border: none;
+            border-bottom: 1px solid #D8D3C8;
+            background: transparent;
+            padding: 8px 0;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-bottom-color: var(--gold);
+        }
+
+        .input-hint {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            color: #B0A898;
+            margin-top: 6px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: var(--burgundy);
+            color: var(--cream);
+            border: none;
+            padding: 18px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            margin-top: 16px;
+        }
+
+        .submit-button:hover {
+            background: #7a1f26;
+            box-shadow: 0 4px 12px rgba(91, 22, 27, 0.3);
+        }
+
+        /* RIGHT PANEL */
+        .panel-right {
+            background: var(--burgundy);
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .panel-right-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .panel-right-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            color: var(--cream);
+            font-weight: 400;
+            line-height: 1.2;
+            margin-bottom: 48px;
+        }
+
+        .panel-detail {
+            margin-bottom: 32px;
+        }
+
+        .panel-detail-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .panel-detail-text {
+            font-family: 'Lora', serif;
+            font-size: 15px;
+            color: rgba(249, 248, 244, 0.75);
+            font-style: italic;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="nav-brand">The Cookie Project</a>
+        <a href="/" class="nav-back">&#8592; All Properties</a>
+    </nav>
+
+    <div class="page-wrap">
+
+        <div class="panel-left">
+            <p class="page-label">New Property</p>
+            <h1 class="page-title">Add a Property</h1>
+
+            {% if error %}
+            <div class="error-banner">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST" action="/property/new">
+                <div class="input-group">
+                    <label class="input-label" for="name">Property Name</label>
+                    <input type="text" id="name" name="name" class="input-field"
+                           placeholder="123 Main St" required value="{{ form.name if form else '' }}">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="loan_amount">Loan Amount</label>
+                    <input type="number" id="loan_amount" name="loan_amount" class="input-field"
+                           placeholder="1250000" step="any" min="1" required
+                           value="{{ form.loan_amount if form else '' }}">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="annual_rate">Fixed Annual Rate (%)</label>
+                    <input type="number" id="annual_rate" name="annual_rate" class="input-field"
+                           placeholder="4.25" step="0.01" min="0" required
+                           value="{{ form.annual_rate if form else '' }}">
+                    <p class="input-hint">Enter as a percentage, e.g. 4.25 for 4.25%</p>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="loan_years">Loan Term (years)</label>
+                    <input type="number" id="loan_years" name="loan_years" class="input-field"
+                           placeholder="25" min="1" required
+                           value="{{ form.loan_years if form else '' }}">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="fixed_period">Fixed Period (years)</label>
+                    <input type="number" id="fixed_period" name="fixed_period" class="input-field"
+                           placeholder="5" min="0" required
+                           value="{{ form.fixed_period if form else '' }}">
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label" for="floating_rate">Floating Rate (%)</label>
+                    <input type="number" id="floating_rate" name="floating_rate" class="input-field"
+                           placeholder="5.50" step="0.01" min="0" required
+                           value="{{ form.floating_rate if form else '' }}">
+                    <p class="input-hint">Enter as a percentage, e.g. 5.50 for 5.50%</p>
+                </div>
+
+                <button type="submit" class="submit-button">Save Property</button>
+            </form>
+        </div>
+
+        <div class="panel-right">
+            <p class="panel-right-label">What happens next</p>
+            <h2 class="panel-right-title">Your property is saved to your portfolio</h2>
+            <div class="panel-detail">
+                <p class="panel-detail-label">Live Dashboard</p>
+                <p class="panel-detail-text">After saving, you'll be taken directly to the live dashboard to explore the full amortization schedule.</p>
+            </div>
+            <div class="panel-detail">
+                <p class="panel-detail-label">Edit Anytime</p>
+                <p class="panel-detail-text">All values can be adjusted in real time from the dashboard. Changes are saved back to your portfolio.</p>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
